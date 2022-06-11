@@ -1,4 +1,6 @@
-import Head from 'next/head'
+import Head from "next/head";
+
+import OrderBook from "../components/orderBook";
 
 export default function Home() {
   return (
@@ -18,15 +20,16 @@ export default function Home() {
         </p>
 
         <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
+          <OrderBook />
+          {/* <a href="https://nextjs.org/docs" className="card">
             <h3>Documentation &rarr;</h3>
             <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+          </a> */}
 
-          <a href="https://nextjs.org/learn" className="card">
+          {/* <a href="https://nextjs.org/learn" className="card">
             <h3>Learn &rarr;</h3>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+          </a> */}
 
           <a
             href="https://github.com/vercel/next.js/tree/master/examples"
@@ -54,8 +57,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className="logo" />
+          Powered by <img src="/vercel.svg" alt="Vercel" className="logo" />
         </a>
       </footer>
 
@@ -205,5 +207,5 @@ export default function Home() {
         }
       `}</style>
     </div>
-  )
+  );
 }
