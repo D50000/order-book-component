@@ -2,7 +2,8 @@ import { FunctionComponent } from "react";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 
-import {} from "./styles";
+import { LastPrice, OrderBookContainer, Quote } from "./styles";
+// import {} from "../../assets/"
 
 type Quote = {
   price: string;
@@ -38,26 +39,48 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
 
   const parseMessages = (event: { data: string }) => {
     const webSocketData: WebSocketData = JSON.parse(event.data).data;
-    console.log(webSocketData);
+    // console.log(webSocketData);
   };
 
   return (
-    <div>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-      <span>order!!Book!!</span>
-    </div>
+    <OrderBookContainer>
+      <div className="title">Order Book</div>
+      <div className="quote-table-head">
+        <span>Price {"(USD)"}</span>
+        <span>Size</span>
+        <span>Total</span>
+      </div>
+      <Quote className="sell">
+        <div className="container">
+          <span>43210</span>
+          <span>200</span>
+          <span>5000</span>
+        </div>
+        <div className="container">
+          <span>43210</span>
+          <span>200</span>
+          <span>5000</span>
+        </div>
+      </Quote>
+
+      <LastPrice>
+        <span>28589</span>
+        <div> {"<  >"} </div>
+      </LastPrice>
+
+      <Quote className="buy">
+        <div className="container">
+          <span>43210</span>
+          <span>200</span>
+          <span>5000</span>
+        </div>
+        <div className="container">
+          <span>43210</span>
+          <span>200</span>
+          <span>5000</span>
+        </div>
+      </Quote>
+    </OrderBookContainer>
   );
 };
 
