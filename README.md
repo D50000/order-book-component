@@ -34,9 +34,13 @@ Topic: `orderBook:BTCPFC_0`
 \*\*\* Additional:
 
 1. Write Doc.
-
 2. Add the unit test.
-
 3. Host a server for demo.
-
 4. CI/CD
+5. convert to [txs](https://nextjs.org/docs/basic-features/typescript) file ✅
+6. [redux](https://redux.js.org/)
+
+### note:
+
+react: "17.0.2"
+react-use-websocket: "^3.0.0"
