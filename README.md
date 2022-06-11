@@ -10,7 +10,7 @@ Create a trading order book component in react.js
 
 ## Requirements
 
-- Framework: React, Vue.js. ⇒ Develop React.js with Next.js
+- Framework: React, Vue.js. ⇒ Develop React.js with Next.js ✅
 - Show max 8 quotes for both buy and sell. Quote row should vertical align center. ⇒ CSS flex
 - Format number with commas as thousands separators. ⇒ data pipe line
 - Add hover background color on whole row when mouse hover on the quote. ⇒ CSS hover with accumulative rows

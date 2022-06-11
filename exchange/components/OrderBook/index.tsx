@@ -4,6 +4,20 @@ import useWebSocket from "react-use-websocket";
 
 import {} from "./styles";
 
+type Quote = {
+  price: string;
+  size: string;
+};
+
+interface WebSocketData {
+  buyQuote: Quote[];
+  gain: number;
+  LastPrice: string;
+  sellQuote: Quote[];
+  symbol: string;
+  timestamp: number;
+}
+
 const WSS_URL: string = "wss://ws.btse.com/ws/futures";
 const WS_TOPIC = {
   op: "subscribe",
@@ -11,28 +25,20 @@ const WS_TOPIC = {
 };
 
 const OrderBook: FunctionComponent = (): JSX.Element => {
-  const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
-    WSS_URL,
-    {
-      onOpen: () => {
-        sendMessage(JSON.stringify(WS_TOPIC));
-        console.log("WebSocket connection opened.");
-      },
-      onClose: () => console.log("WebSocket connection closed."),
-      shouldReconnect: (closeEvent) => true,
-      onMessage: (event: WebSocketEventMap["message"]) =>
-        processMessages(event),
-    }
-  );
+  const { sendJsonMessage } = useWebSocket(WSS_URL, {
+    onOpen: () => console.log("WebSocket connection opened."),
+    onClose: () => console.log("WebSocket connection closed."),
+    shouldReconnect: (closeEvent) => true,
+    onMessage: (event: WebSocketEventMap["message"]) => parseMessages(event),
+  });
 
-  const processMessages = (event: { data: string }) => {
-    const response = JSON.parse(event.data);
-    console.log(response);
-    // if (response.numLevels) {
-    //   dispatch(addExistingState(response));
-    // } else {
-    //   process(response);
-    // }
+  useEffect(() => {
+    sendJsonMessage(WS_TOPIC);
+  }, [WS_TOPIC]);
+
+  const parseMessages = (event: { data: string }) => {
+    const webSocketData: WebSocketData = JSON.parse(event.data).data;
+    console.log(webSocketData);
   };
 
   return (
