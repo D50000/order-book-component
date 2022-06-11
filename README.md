@@ -2,6 +2,12 @@
 
 Create a trading order book component in react.js
 
+## Instruction
+1. Go in side the `exchange` directory.
+2. Clone the source code.
+3. Run `npm install`.
+4. Run `npm run dev`.
+
 ## Requirements
 
 - Framework: React, Vue.js. ⇒ Develop React.js with Next.js
@@ -33,7 +39,7 @@ Topic: `orderBook:BTCPFC_0`
 
 \*\*\* Additional:
 
-1. Write Doc.
+1. Write Doc. ✅
 2. Add the unit test.
 3. Host a server for demo.
 4. CI/CD
@@ -44,3 +50,4 @@ Topic: `orderBook:BTCPFC_0`
 
 react: "17.0.2"
 react-use-websocket: "^3.0.0"
+styled-components: "^5.3.5"

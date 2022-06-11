@@ -2,6 +2,8 @@ import { FunctionComponent } from "react";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 
+import {} from "./styles";
+
 const WSS_URL: string = "wss://ws.btse.com/ws/futures";
 const WS_TOPIC = {
   op: "subscribe",
