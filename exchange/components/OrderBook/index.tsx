@@ -1,9 +1,11 @@
 import { FunctionComponent, useState } from "react";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
+import Image from "next/image";
 
 import { LastPrice, OrderBookContainer, Quote } from "./styles";
-// import {} from "../../assets/"
+import { default as arrowGreen } from "../../assets/IconArrowGreen.svg";
+import { default as arrowRed } from "../../assets/IconArrowRed.svg";
 
 type Quote = {
   price: string;
@@ -59,6 +61,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
   };
 
   const calculateData = (data: OrderBookData) => {
+    console.log(data.gain);
     // Calculate the buy/sell quote for GUI to implement the animation.
     const maxQuotes = 8;
     const newSellArray = [];
@@ -134,7 +137,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     data.sellQuote = newSellArray.reverse();
     data.buyQuote = newBuyArray;
     // console.log(orderBookData);
-    // console.log(currentOrderBook);
+    // console.log(currentOrderBook.gain);
     setOrderBookData(data);
   };
 
@@ -160,12 +163,35 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
           </div>
         ))}
       </Quote>
-
-      <LastPrice>
-        <span>{orderBookData?.lastPrice}</span>
-        <div> {"<  >"} </div>
-      </LastPrice>
-
+      {(() => {
+        switch (orderBookData?.gain) {
+          case 1:
+            return (
+              <LastPrice className="increase">
+                <span>{orderBookData?.lastPrice}</span>
+                <div className="up">
+                  <Image src={arrowGreen} />
+                </div>
+              </LastPrice>
+            );
+          case -1:
+            return (
+              <LastPrice className="decrease">
+                <span>{orderBookData?.lastPrice}</span>
+                <div className="down">
+                  <Image src={arrowRed} />
+                </div>
+              </LastPrice>
+            );
+          default:
+            return (
+              <LastPrice className="fair">
+                <span>{orderBookData?.lastPrice}</span>
+                <div className="none"></div>
+              </LastPrice>
+            );
+        }
+      })()}
       <Quote className="buy">
         {orderBookData.buyQuote?.map((buyQuote) => (
           <div className="container" key={buyQuote.price}>

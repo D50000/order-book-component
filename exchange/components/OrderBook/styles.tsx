@@ -62,15 +62,43 @@ export const Quote = styled.div`
 `;
 
 export const LastPrice = styled.div`
-  color: #8698aa;
   font-size: 16.8px;
+  font-weight: 700;
   width: 100%;
   height: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
 
+  &.increase {
+    color: #00b15d;
+    background: rgba(16, 186, 104, 0.12);
+  }
+
+  &.decrease {
+    color: #ff5b5a;
+    background: rgba(255, 90, 90, 0.12);
+  }
+
+  &.fair {
+    color: #ffffff;
+    background: rgba(134, 152, 170, 0.12);
+  }
+
   > span {
     height: 21.5px;
+  }
+
+  > div {
+    width: 15px;
+    height: 24px;
+    margin-left: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.up {
+      transform: rotate(180deg);
+    }
   }
 `;

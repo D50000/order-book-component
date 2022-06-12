@@ -3,6 +3,7 @@
 Create a trading order book component in react.js
 
 ## Instruction
+
 1. Go in side the `exchange` directory.
 2. Clone the source code.
 3. Run `npm install`.
@@ -10,13 +11,13 @@ Create a trading order book component in react.js
 
 ## Requirements
 
--  ✅ Framework: React, Vue.js. ⇒ Develop React.js with Next.js
--  ✅ Show max 8 quotes for both buy and sell. Quote row should vertical align center. ⇒ CSS flex
+- ✅ Framework: React, Vue.js. ⇒ Develop React.js with Next.js
+- ✅ Show max 8 quotes for both buy and sell. Quote row should vertical align center. ⇒ CSS flex
 - Format number with commas as thousands separators. ⇒ data pipe line
 - Add hover background color on whole row when mouse hover on the quote. ⇒ CSS hover with accumulative rows
-- Last price is up or down is determine by the data `gain` . ⇒ toggle the up/down icon
+- ✅ Last price is up or down is determine by the data `gain` . ⇒ toggle the up/down icon, ***no 0***
 - _Price percentage change can be omitted._
--  ✅ Quote total formula ⇒ simple order book logic
+- ✅ Quote total formula ⇒ simple order book logic
   - Sell quotes: sum up quote size from lowest price quote to the highest
   - Buy quotes: sum up quote size from highest price quote to the lowest
 - Add hover calculation tooltip ⇒ Need to get the dynamic data when hovering
@@ -31,7 +32,7 @@ Create a trading order book component in react.js
 
 [https://api.btse.com/futures/api/v2.1/orderbook/L2](https://api.btse.com/futures/api/v2.1/orderbook/L2)
 
- ✅ \*\* Bonus point for connecting to Websocket API:
+✅ \*\* Bonus point for connecting to Websocket API:
 
 Endpoint: `wss://ws.btse.com/ws/futures`
 
@@ -47,6 +48,7 @@ Topic: `orderBook:BTCPFC_0`
 
 ### note:
 
+nvm: "v16.14.2"
 react: "17.0.2"
 react-use-websocket: "^3.0.0"
 styled-components: "^5.3.5"
