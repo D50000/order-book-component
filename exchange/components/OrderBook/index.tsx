@@ -12,13 +12,25 @@ type Quote = {
 };
 
 interface OrderBookData {
-  buyQuote: Quote[];
-  gain: number;
-  lastPrice: string;
   sellQuote: Quote[];
+  lastPrice: string;
+  gain: number;
+  buyQuote: Quote[];
   symbol: string;
   timestamp: number;
+  diffSellQuote: DiffQuoteMap<string>;
+  diffBuyQuote: DiffQuoteMap<string>;
 }
+
+type DiffQuoteMap<T> = {
+  T: {
+    price: number;
+    size: number;
+    cumulativeTotal: number;
+    isSizeChange: boolean;
+    isNewRow: boolean;
+  };
+};
 
 const WSS_URL: string = "wss://ws.btse.com/ws/futures";
 const WS_TOPIC = {
@@ -41,35 +53,88 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       if (messageObject?.data) {
         calculateData(messageObject.data);
       }
-      // console.log(currentOrderBook?.lastPrice);
     } catch (error) {
       console.error(`Error: ${error}`);
     }
   };
 
   const calculateData = (data: OrderBookData) => {
+    // Calculate the buy/sell quote for GUI to implement the animation.
     const maxQuotes = 8;
     const newSellArray = [];
     let totalSellSize = 0;
-    for (
-      let i = data.sellQuote.length - 1;
-      i >= data.sellQuote.length - maxQuotes;
-      i--
-    ) {
-      totalSellSize += +data.sellQuote[i].size;
-      data.sellQuote[i].cumulativeTotal = totalSellSize;
-      newSellArray.push(data.sellQuote[i]);
-    }
-    data.sellQuote = newSellArray;
-
+    let diffSellQuote = {} as DiffQuoteMap<string>;
+    const reversedSellQuote = data.sellQuote.reverse();
     const newBuyArray = [];
     let totalBuySize = 0;
-    for (let i = 0; i <= maxQuotes - 1; i++) {
+    let diffBuyQuote = {} as DiffQuoteMap<string>;
+    for (let i = 0; i < maxQuotes; i++) {
+      // Sell quotes
+      // 1. Parse and format the current order book data for GUI.
+      totalSellSize += +reversedSellQuote[i].size;
+      reversedSellQuote[i].cumulativeTotal = totalSellSize;
+      newSellArray.push(reversedSellQuote[i]);
+      // 2. Calculate and store the current order book snapshot.
+      diffSellQuote[reversedSellQuote[i].price] = {
+        price: +reversedSellQuote[i].price,
+        size: +reversedSellQuote[i].size,
+        cumulativeTotal: reversedSellQuote[i].cumulativeTotal,
+        isSizeChange: false,
+        isNewRow: false,
+      };
+      data.diffSellQuote = diffSellQuote;
+      // Buy quotes
+      // 1. Parse and format the current order book data for GUI.
       totalBuySize += +data.buyQuote[i].size;
       data.buyQuote[i].cumulativeTotal = totalBuySize;
       newBuyArray.push(data.buyQuote[i]);
+      // 2. Calculate and store the current order book snapshot.
+      diffBuyQuote[data.buyQuote[i].price] = {
+        price: +data.buyQuote[i].price,
+        size: +data.buyQuote[i].size,
+        cumulativeTotal: data.buyQuote[i].cumulativeTotal,
+        isSizeChange: false,
+        isNewRow: false,
+      };
+      data.diffBuyQuote = diffBuyQuote;
     }
+    // 3. Compare the difference between the current and previous's order book quote snapshot.
+    const originalOrderBook = orderBookData;
+    const currentOrderBook = data;
+    if (originalOrderBook?.diffSellQuote && originalOrderBook?.diffBuyQuote) {
+      for (const [key, value] of Object.entries(
+        currentOrderBook.diffSellQuote
+      )) {
+        if (!originalOrderBook.diffSellQuote[key]) {
+          currentOrderBook.diffSellQuote[key].isNewRow = true;
+        } else {
+          if (
+            originalOrderBook.diffSellQuote[key].size !==
+            currentOrderBook.diffSellQuote[key].size
+          ) {
+            currentOrderBook.diffSellQuote[key].isSizeChange = true;
+          }
+        }
+      }
+      for (const [key, value] of Object.entries(
+        currentOrderBook.diffBuyQuote
+      )) {
+        if (!originalOrderBook.diffBuyQuote[key]) {
+          currentOrderBook.diffBuyQuote[key].isNewRow = true;
+        } else {
+          if (
+            originalOrderBook.diffBuyQuote[key].size !==
+            currentOrderBook.diffBuyQuote[key].size
+          ) {
+            currentOrderBook.diffBuyQuote[key].isSizeChange = true;
+          }
+        }
+      }
+    }
+    data.sellQuote = newSellArray.reverse();
     data.buyQuote = newBuyArray;
+    // console.log(orderBookData);
+    // console.log(currentOrderBook);
     setOrderBookData(data);
   };
 
