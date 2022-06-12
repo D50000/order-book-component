@@ -80,9 +80,13 @@ export const Quote = styled.div`
       width: 33%;
       text-align: end;
 
-      // &.size-blink {
-      //   background: rgba(0, 177, 93, 0.5);
-      // }
+      &.increase {
+        animation: blink-green-animation 0.1s;
+      }
+
+      &.decrease {
+        animation: blink-red-animation 0.1s;
+      }
     }
   }
 

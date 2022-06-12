@@ -24,7 +24,7 @@ Create a trading order book component in react.js
   - AVG Price = [sumproduct](https://support.microsoft.com/en-us/office/sumproduct-function-16753e75-9f68-4874-94ac-4d2145a2fd2e)( price \* size ) / total
   - Total Value = [sumproduct](https://support.microsoft.com/en-us/office/sumproduct-function-16753e75-9f68-4874-94ac-4d2145a2fd2e)( price \* size )
   * [sumproduct reference](https://support.microsoft.com/en-us/office/sumproduct-function-16753e75-9f68-4874-94ac-4d2145a2fd2e) (see Example 1)
-- Use mock data and a data update timer to present the following animations.
+- ✅ Use mock data and a data update timer to present the following animations.
   - When new quote appear(price hasn't shown on the order book before), add highlight animation on whole quote row. Red background color for sell quote. Green background color for buy quote. ⇒ Need to handle before data update
   - When quote size change, add highlight animation on size cell. Red background color if size increase. Green background color if size decrease. ⇒ detect the size is update
 

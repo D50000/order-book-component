@@ -31,10 +31,16 @@ type DiffQuoteMap<T> = {
     price: number;
     size: number;
     cumulativeTotal: number;
-    isSizeChange: boolean;
+    sizeChange: SizeChange;
     isNewRow: boolean;
   };
 };
+
+enum SizeChange {
+  "NORMAL" = "normal",
+  "INCREASE" = "increase",
+  "DECREASE" = "decrease",
+}
 
 const WSS_URL: string = "wss://ws.btse.com/ws/futures";
 const WS_TOPIC = {
@@ -83,7 +89,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
         price: +reversedSellQuote[i].price,
         size: +reversedSellQuote[i].size,
         cumulativeTotal: reversedSellQuote[i].cumulativeTotal,
-        isSizeChange: false,
+        sizeChange: SizeChange.NORMAL,
         isNewRow: false,
       };
       data.diffSellQuote = diffSellQuote;
@@ -97,7 +103,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
         price: +data.buyQuote[i].price,
         size: +data.buyQuote[i].size,
         cumulativeTotal: data.buyQuote[i].cumulativeTotal,
-        isSizeChange: false,
+        sizeChange: SizeChange.NORMAL,
         isNewRow: false,
       };
       data.diffBuyQuote = diffBuyQuote;
@@ -113,10 +119,17 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
           currentOrderBook.diffSellQuote[key].isNewRow = true;
         } else {
           if (
-            originalOrderBook.diffSellQuote[key].size !==
+            originalOrderBook.diffSellQuote[key].size >
             currentOrderBook.diffSellQuote[key].size
           ) {
-            currentOrderBook.diffSellQuote[key].isSizeChange = true;
+            currentOrderBook.diffSellQuote[key].sizeChange =
+              SizeChange.DECREASE;
+          } else if (
+            originalOrderBook.diffSellQuote[key].size <
+            currentOrderBook.diffSellQuote[key].size
+          ) {
+            currentOrderBook.diffSellQuote[key].sizeChange =
+              SizeChange.INCREASE;
           }
         }
       }
@@ -127,10 +140,15 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
           currentOrderBook.diffBuyQuote[key].isNewRow = true;
         } else {
           if (
-            originalOrderBook.diffBuyQuote[key].size !==
+            originalOrderBook.diffBuyQuote[key].size >
             currentOrderBook.diffBuyQuote[key].size
           ) {
-            currentOrderBook.diffBuyQuote[key].isSizeChange = true;
+            currentOrderBook.diffBuyQuote[key].sizeChange = SizeChange.DECREASE;
+          } else if (
+            originalOrderBook.diffBuyQuote[key].size <
+            currentOrderBook.diffBuyQuote[key].size
+          ) {
+            currentOrderBook.diffBuyQuote[key].sizeChange = SizeChange.INCREASE;
           }
         }
       }
@@ -172,6 +190,9 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
               thousandSeparator={true}
             />
             <CurrencyFormat
+              className={
+                orderBookData.diffSellQuote[sellQuote.price].sizeChange
+              }
               value={sellQuote.size}
               displayType={"text"}
               thousandSeparator={true}
@@ -242,11 +263,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
               thousandSeparator={true}
             />
             <CurrencyFormat
-              className={
-                orderBookData.diffBuyQuote[buyQuote.price].isSizeChange
-                  ? "size-blink"
-                  : ""
-              }
+              className={orderBookData.diffBuyQuote[buyQuote.price].sizeChange}
               value={buyQuote.size}
               displayType={"text"}
               thousandSeparator={true}
