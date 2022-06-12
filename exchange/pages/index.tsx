@@ -13,10 +13,7 @@ const Home: FunctionComponent = (): JSX.Element => {
       </Head>
 
       <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
+        <h1 className="title">BTC/USD Perpetual</h1>
         <OrderBook />
       </main>
 

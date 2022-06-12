@@ -31,23 +31,19 @@ export const OrderBookContainer = styled.div`
 `;
 
 export const Quote = styled.div`
-  color: #8698aa;
+  color: #ffffff;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
-  &:hover {
-    background: #334573;
-    cursor: pointer;
-  }
-
-  &.sell {
+  &.sell > div.container > span:nth-child(1) {
     color: #ff5b5a;
   }
 
-  &.buy {
+  &.buy > div.container > span:nth-child(1) {
     color: #00b15d;
   }
 
@@ -57,6 +53,11 @@ export const Quote = styled.div`
     padding: 1px 10px 2px;
     display: flex;
     justify-content: space-between;
+
+    &:hover {
+      background: #334573;
+      cursor: pointer;
+    }
   }
 `;
 
