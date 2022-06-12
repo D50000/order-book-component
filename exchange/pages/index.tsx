@@ -32,8 +32,8 @@ const Home: FunctionComponent = (): JSX.Element => {
         body {
           padding: 0;
           margin: 0;
-          font-family: "monospace", "Helvetica Neue", "Helvetica", "Arial",
-            "PingFang TC", "PingFang SC", "Microsoft JhengHei",
+          font-family: "BTSE", "monospace", "Helvetica Neue", "Helvetica",
+            "Arial", "PingFang TC", "PingFang SC", "Microsoft JhengHei",
             "Microsoft YaHei", "sans-serif";
         }
 

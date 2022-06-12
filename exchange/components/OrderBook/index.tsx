@@ -157,7 +157,15 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       </div>
       <Quote className="sell">
         {orderBookData.sellQuote?.map((sellQuote) => (
-          <div className="container" key={sellQuote.price}>
+          <div
+            className={
+              "container " +
+              (orderBookData.diffSellQuote[sellQuote.price].isNewRow
+                ? "blink-red"
+                : "")
+            }
+            key={sellQuote.price}
+          >
             <CurrencyFormat
               value={sellQuote.price}
               displayType={"text"}
@@ -219,13 +227,26 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       })()}
       <Quote className="buy">
         {orderBookData.buyQuote?.map((buyQuote) => (
-          <div className="container" key={buyQuote.price}>
+          <div
+            className={
+              "container " +
+              (orderBookData.diffBuyQuote[buyQuote.price].isNewRow
+                ? "blink-green"
+                : "")
+            }
+            key={buyQuote.price}
+          >
             <CurrencyFormat
               value={buyQuote.price}
               displayType={"text"}
               thousandSeparator={true}
             />
             <CurrencyFormat
+              className={
+                orderBookData.diffBuyQuote[buyQuote.price].isSizeChange
+                  ? "size-blink"
+                  : ""
+              }
               value={buyQuote.size}
               displayType={"text"}
               thousandSeparator={true}

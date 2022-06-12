@@ -44,12 +44,24 @@ export const Quote = styled.div`
   align-items: center;
   cursor: pointer;
 
-  &.sell > div.container > span:nth-child(1) {
-    color: #ff5b5a;
+  &.sell > div.container {
+    &.blink-red {
+      animation: blink-red-animation 0.2s;
+    }
+
+    > span:nth-child(1) {
+      color: #ff5b5a;
+    }
   }
 
-  &.buy > div.container > span:nth-child(1) {
-    color: #00b15d;
+  &.buy > div.container {
+    &.blink-green {
+      animation: blink-green-animation 0.2s;
+    }
+
+    > span:nth-child(1) {
+      color: #00b15d;
+    }
   }
 
   > div.container {
@@ -67,6 +79,22 @@ export const Quote = styled.div`
     > span {
       width: 33%;
       text-align: end;
+
+      // &.size-blink {
+      //   background: rgba(0, 177, 93, 0.5);
+      // }
+    }
+  }
+
+  @keyframes blink-green-animation {
+    to {
+      background: rgba(0, 177, 93, 0.5);
+    }
+  }
+
+  @keyframes blink-red-animation {
+    to {
+      background: rgba(255, 91, 90, 0.5);
     }
   }
 `;
