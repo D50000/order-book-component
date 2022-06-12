@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import Image from "next/image";
 
+import * as CurrencyFormat from "react-currency-format";
+
 import { LastPrice, OrderBookContainer, Quote } from "./styles";
 import { default as arrowGreen } from "../../assets/IconArrowGreen.svg";
 import { default as arrowRed } from "../../assets/IconArrowRed.svg";
@@ -61,7 +63,6 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
   };
 
   const calculateData = (data: OrderBookData) => {
-    console.log(data.gain);
     // Calculate the buy/sell quote for GUI to implement the animation.
     const maxQuotes = 8;
     const newSellArray = [];
@@ -157,9 +158,21 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       <Quote className="sell">
         {orderBookData.sellQuote?.map((sellQuote) => (
           <div className="container" key={sellQuote.price}>
-            <span>{sellQuote.price}</span>
-            <span>{sellQuote.size}</span>
-            <span>{sellQuote.cumulativeTotal}</span>
+            <CurrencyFormat
+              value={sellQuote.price}
+              displayType={"text"}
+              thousandSeparator={true}
+            />
+            <CurrencyFormat
+              value={sellQuote.size}
+              displayType={"text"}
+              thousandSeparator={true}
+            />
+            <CurrencyFormat
+              value={sellQuote.cumulativeTotal}
+              displayType={"text"}
+              thousandSeparator={true}
+            />
           </div>
         ))}
       </Quote>
@@ -168,7 +181,11 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
           case 1:
             return (
               <LastPrice className="increase">
-                <span>{orderBookData?.lastPrice}</span>
+                <CurrencyFormat
+                  value={orderBookData?.lastPrice}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                />
                 <div className="up">
                   <Image src={arrowGreen} />
                 </div>
@@ -177,7 +194,11 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
           case -1:
             return (
               <LastPrice className="decrease">
-                <span>{orderBookData?.lastPrice}</span>
+                <CurrencyFormat
+                  value={orderBookData?.lastPrice}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                />
                 <div className="down">
                   <Image src={arrowRed} />
                 </div>
@@ -186,7 +207,11 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
           default:
             return (
               <LastPrice className="fair">
-                <span>{orderBookData?.lastPrice}</span>
+                <CurrencyFormat
+                  value={orderBookData?.lastPrice}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                />
                 <div className="none"></div>
               </LastPrice>
             );
@@ -195,9 +220,21 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       <Quote className="buy">
         {orderBookData.buyQuote?.map((buyQuote) => (
           <div className="container" key={buyQuote.price}>
-            <span>{buyQuote.price}</span>
-            <span>{buyQuote.size}</span>
-            <span>{buyQuote.cumulativeTotal}</span>
+            <CurrencyFormat
+              value={buyQuote.price}
+              displayType={"text"}
+              thousandSeparator={true}
+            />
+            <CurrencyFormat
+              value={buyQuote.size}
+              displayType={"text"}
+              thousandSeparator={true}
+            />
+            <CurrencyFormat
+              value={buyQuote.cumulativeTotal}
+              displayType={"text"}
+              thousandSeparator={true}
+            />
           </div>
         ))}
       </Quote>

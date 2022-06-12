@@ -13,9 +13,9 @@ Create a trading order book component in react.js
 
 - ✅ Framework: React, Vue.js. ⇒ Develop React.js with Next.js
 - ✅ Show max 8 quotes for both buy and sell. Quote row should vertical align center. ⇒ CSS flex
-- Format number with commas as thousands separators. ⇒ data pipe line
+- ✅ Format number with commas as thousands separators. ⇒ data pipe line
 - Add hover background color on whole row when mouse hover on the quote. ⇒ CSS hover with accumulative rows
-- ✅ Last price is up or down is determine by the data `gain` . ⇒ toggle the up/down icon, ***no 0***
+- ✅ Last price is up or down is determine by the data `gain` . ⇒ toggle the up/down icon, **_no 0_**
 - _Price percentage change can be omitted._
 - ✅ Quote total formula ⇒ simple order book logic
   - Sell quotes: sum up quote size from lowest price quote to the highest
@@ -40,11 +40,11 @@ Topic: `orderBook:BTCPFC_0`
 
 \*\*\* Additional:
 
-1. Write Doc. ✅
+1. ✅ Write Doc.
 2. Add the unit test.
 3. Host a server for demo.
 4. CI/CD
-5. convert to [txs](https://nextjs.org/docs/basic-features/typescript) file ✅
+5. ✅ convert to [txs](https://nextjs.org/docs/basic-features/typescript) file
 
 ### note:
 
@@ -52,3 +52,4 @@ nvm: "v16.14.2"
 react: "17.0.2"
 react-use-websocket: "^3.0.0"
 styled-components: "^5.3.5"
+react-currency-format: "^1.1.0"

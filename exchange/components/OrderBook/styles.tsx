@@ -27,6 +27,11 @@ export const OrderBookContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    > span {
+      width: 33%;
+      text-align: end;
+    }
   }
 `;
 
@@ -58,6 +63,11 @@ export const Quote = styled.div`
       background: #334573;
       cursor: pointer;
     }
+
+    > span {
+      width: 33%;
+      text-align: end;
+    }
   }
 `;
 
@@ -66,6 +76,7 @@ export const LastPrice = styled.div`
   font-weight: 700;
   width: 100%;
   height: 28px;
+  padding-left: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
