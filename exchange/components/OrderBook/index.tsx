@@ -8,18 +8,18 @@ import * as CurrencyFormat from "react-currency-format";
 import { LastPrice, OrderBookContainer, Quote } from "./styles";
 import { default as arrowGreen } from "../../assets/IconArrowGreen.svg";
 import { default as arrowRed } from "../../assets/IconArrowRed.svg";
-// import QuoteC from "./Quote/index";
+import QuoteInfo from "./QuoteInfo";
 
 type Quote = {
   price: string;
   size: string;
   totalValue?: number;
-  cumulativeTotal?: number;
+  cumulativeTotalSize?: number;
   cumulativeTotalValue?: number;
   cumulativeTotalInPercent?: number;
 };
 
-interface OrderBookData {
+export interface OrderBookData {
   sellQuote: Quote[];
   lastPrice: string;
   gain: number;
@@ -88,7 +88,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       // Sell quotes
       // 1. Parse and format the current order book data for GUI.
       totalSellSize += +reversedSellQuote[i].size;
-      reversedSellQuote[i].cumulativeTotal = totalSellSize;
+      reversedSellQuote[i].cumulativeTotalSize = totalSellSize;
       reversedSellQuote[i].totalValue =
         +reversedSellQuote[i].price * +reversedSellQuote[i].size;
       totalSellValue += reversedSellQuote[i].totalValue;
@@ -105,7 +105,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       // Buy quotes
       // 1. Parse and format the current order book data for GUI.
       totalBuySize += +data.buyQuote[i].size;
-      data.buyQuote[i].cumulativeTotal = totalBuySize;
+      data.buyQuote[i].cumulativeTotalSize = totalBuySize;
       data.buyQuote[i].totalValue =
         +data.buyQuote[i].price * +data.buyQuote[i].size;
       totalBuyValue += data.buyQuote[i].totalValue;
@@ -169,17 +169,19 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     }
     // 4. Calculate the total size bar length.
     const largestSizePercentRatio =
-      currentOrderBook.sellQuote[0].cumulativeTotal >
-      currentOrderBook.buyQuote[maxQuotes - 1].cumulativeTotal
-        ? 100 / currentOrderBook.sellQuote[0].cumulativeTotal
-        : 100 / currentOrderBook.buyQuote[maxQuotes - 1].cumulativeTotal;
+      currentOrderBook.sellQuote[0].cumulativeTotalSize >
+      currentOrderBook.buyQuote[maxQuotes - 1].cumulativeTotalSize
+        ? 100 / currentOrderBook.sellQuote[0].cumulativeTotalSize
+        : 100 / currentOrderBook.buyQuote[maxQuotes - 1].cumulativeTotalSize;
     for (let i = 0; i < currentOrderBook.sellQuote.length; i++) {
       currentOrderBook.sellQuote[i].cumulativeTotalInPercent =
-        currentOrderBook.sellQuote[i].cumulativeTotal * largestSizePercentRatio;
+        currentOrderBook.sellQuote[i].cumulativeTotalSize *
+        largestSizePercentRatio;
     }
     for (let i = 0; i < currentOrderBook.buyQuote.length; i++) {
       currentOrderBook.buyQuote[i].cumulativeTotalInPercent =
-        currentOrderBook.buyQuote[i].cumulativeTotal * largestSizePercentRatio;
+        currentOrderBook.buyQuote[i].cumulativeTotalSize *
+        largestSizePercentRatio;
     }
     // console.log(orderBookData);
     // console.log(currentOrderBook.gain);
@@ -197,7 +199,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     // const avgPrice = sumTotalValue / sumSize;
     console.log(
       orderBookData.sellQuote[index].cumulativeTotalValue /
-        orderBookData.sellQuote[index].cumulativeTotal
+        orderBookData.sellQuote[index].cumulativeTotalSize
     );
     console.log(orderBookData.sellQuote[index].cumulativeTotalValue);
   };
@@ -227,12 +229,11 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
           >
             <Tooltip
               // onMouseEnter={() => calculateSellQuoteTooltipData(index)}
-              content={
-                orderBookData.sellQuote[index].cumulativeTotalValue /
-                orderBookData.sellQuote[index].cumulativeTotal
-              }
               placement="rightStart"
-              color="primary"
+              color="invert"
+              content={
+                <QuoteInfo orderBookData={orderBookData} index={index} />
+              }
             >
               <CurrencyFormat
                 value={sellQuote.price}
@@ -248,7 +249,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
                 thousandSeparator={true}
               />
               <CurrencyFormat
-                value={sellQuote.cumulativeTotal}
+                value={sellQuote.cumulativeTotalSize}
                 displayType={"text"}
                 thousandSeparator={true}
                 renderText={(value) => (
@@ -319,9 +320,12 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
             key={index}
           >
             <Tooltip
-              content="LLLLLLLLLLL"
+              // onMouseEnter={() => calculateSellQuoteTooltipData(index)}
               placement="rightStart"
-              color="primary"
+              color="invert"
+              content={
+                <QuoteInfo orderBookData={orderBookData} index={index} />
+              }
             >
               <CurrencyFormat
                 value={buyQuote.price}
@@ -337,7 +341,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
                 thousandSeparator={true}
               />
               <CurrencyFormat
-                value={buyQuote.cumulativeTotal}
+                value={buyQuote.cumulativeTotalSize}
                 displayType={"text"}
                 thousandSeparator={true}
                 renderText={(value) => (
