@@ -3,17 +3,19 @@ import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import Image from "next/image";
 import { Tooltip } from "@nextui-org/react";
-
 import * as CurrencyFormat from "react-currency-format";
 
 import { LastPrice, OrderBookContainer, Quote } from "./styles";
 import { default as arrowGreen } from "../../assets/IconArrowGreen.svg";
 import { default as arrowRed } from "../../assets/IconArrowRed.svg";
+// import QuoteC from "./Quote/index";
 
 type Quote = {
   price: string;
   size: string;
+  totalValue?: number;
   cumulativeTotal?: number;
+  cumulativeTotalValue?: number;
   cumulativeTotalInPercent?: number;
 };
 
@@ -32,7 +34,6 @@ type DiffQuoteMap<T> = {
   T: {
     price: number;
     size: number;
-    cumulativeTotal: number;
     sizeChange: SizeChange;
     isNewRow: boolean;
   };
@@ -49,6 +50,7 @@ const WS_TOPIC = {
   op: "subscribe",
   args: ["orderBookApi:BTCPFC_0"],
 };
+const SINGLE_CONTRACT_UNIT = 1000;
 
 const OrderBook: FunctionComponent = (): JSX.Element => {
   const [orderBookData, setOrderBookData] = useState({} as OrderBookData);
@@ -75,22 +77,27 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     const maxQuotes = 8;
     const newSellArray = [];
     let totalSellSize = 0;
+    let totalSellValue = 0;
     let diffSellQuote = {} as DiffQuoteMap<string>;
     const reversedSellQuote = data.sellQuote.reverse();
     const newBuyArray = [];
     let totalBuySize = 0;
+    let totalBuyValue = 0;
     let diffBuyQuote = {} as DiffQuoteMap<string>;
     for (let i = 0; i < maxQuotes; i++) {
       // Sell quotes
       // 1. Parse and format the current order book data for GUI.
       totalSellSize += +reversedSellQuote[i].size;
       reversedSellQuote[i].cumulativeTotal = totalSellSize;
+      reversedSellQuote[i].totalValue =
+        +reversedSellQuote[i].price * +reversedSellQuote[i].size;
+      totalSellValue += reversedSellQuote[i].totalValue;
+      reversedSellQuote[i].cumulativeTotalValue = totalSellValue;
       newSellArray.push(reversedSellQuote[i]);
       // 2. Calculate and store the current order book snapshot.
       diffSellQuote[reversedSellQuote[i].price] = {
         price: +reversedSellQuote[i].price,
         size: +reversedSellQuote[i].size,
-        cumulativeTotal: reversedSellQuote[i].cumulativeTotal,
         sizeChange: SizeChange.NORMAL,
         isNewRow: false,
       };
@@ -99,12 +106,15 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       // 1. Parse and format the current order book data for GUI.
       totalBuySize += +data.buyQuote[i].size;
       data.buyQuote[i].cumulativeTotal = totalBuySize;
+      data.buyQuote[i].totalValue =
+        +data.buyQuote[i].price * +data.buyQuote[i].size;
+      totalBuyValue += data.buyQuote[i].totalValue;
+      data.buyQuote[i].cumulativeTotalValue = totalBuyValue;
       newBuyArray.push(data.buyQuote[i]);
       // 2. Calculate and store the current order book snapshot.
       diffBuyQuote[data.buyQuote[i].price] = {
         price: +data.buyQuote[i].price,
         size: +data.buyQuote[i].size,
-        cumulativeTotal: data.buyQuote[i].cumulativeTotal,
         sizeChange: SizeChange.NORMAL,
         isNewRow: false,
       };
@@ -176,11 +186,26 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     setOrderBookData(data);
   };
 
+  const calculateSellQuoteTooltipData = (index: number) => {
+    // const reversedSellQuote = orderBookData.sellQuote.reverse();
+    // let sumTotalValue = 0;
+    // let sumSize = 0;
+    // for (let i = 0; i < reversedSellQuote.length - index; i++) {
+    //   sumTotalValue += +orderBookData.sellQuote[i].totalValue;
+    //   sumSize += +orderBookData.sellQuote[i].size;
+    // }
+    // const avgPrice = sumTotalValue / sumSize;
+    console.log(
+      orderBookData.sellQuote[index].cumulativeTotalValue /
+        orderBookData.sellQuote[index].cumulativeTotal
+    );
+    console.log(orderBookData.sellQuote[index].cumulativeTotalValue);
+  };
+
   // fetch the ws when componentDidMount, componentDidUpdate trigger
   useEffect(() => {
     sendJsonMessage(WS_TOPIC);
   }, [WS_TOPIC]);
-
   return (
     <OrderBookContainer>
       <div className="title">Order Book</div>
@@ -190,7 +215,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
         <span>Total</span>
       </div>
       <Quote className="sell">
-        {orderBookData.sellQuote?.map((sellQuote) => (
+        {orderBookData.sellQuote?.map((sellQuote, index) => (
           <div
             className={
               "container " +
@@ -198,9 +223,17 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
                 ? "blink-red"
                 : "")
             }
-            key={sellQuote.price}
+            key={index}
           >
-            <Tooltip content="LLLLLLLLLLL" placement="rightStart" color="primary">
+            <Tooltip
+              // onMouseEnter={() => calculateSellQuoteTooltipData(index)}
+              content={
+                orderBookData.sellQuote[index].cumulativeTotalValue /
+                orderBookData.sellQuote[index].cumulativeTotal
+              }
+              placement="rightStart"
+              color="primary"
+            >
               <CurrencyFormat
                 value={sellQuote.price}
                 displayType={"text"}
@@ -275,7 +308,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
         }
       })()}
       <Quote className="buy">
-        {orderBookData.buyQuote?.map((buyQuote) => (
+        {orderBookData.buyQuote?.map((buyQuote, index) => (
           <div
             className={
               "container " +
@@ -283,9 +316,13 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
                 ? "blink-green"
                 : "")
             }
-            key={buyQuote.price}
+            key={index}
           >
-            <Tooltip content="LLLLLLLLLLL" placement="rightStart" color="primary">
+            <Tooltip
+              content="LLLLLLLLLLL"
+              placement="rightStart"
+              color="primary"
+            >
               <CurrencyFormat
                 value={buyQuote.price}
                 displayType={"text"}
@@ -320,5 +357,4 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     </OrderBookContainer>
   );
 };
-
 export default OrderBook;
