@@ -13,6 +13,7 @@ type Quote = {
   price: string;
   size: string;
   cumulativeTotal?: number;
+  cumulativeTotalInPercent?: number;
 };
 
 interface OrderBookData {
@@ -108,6 +109,8 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       };
       data.diffBuyQuote = diffBuyQuote;
     }
+    data.sellQuote = newSellArray.reverse();
+    data.buyQuote = newBuyArray;
     // 3. Compare the difference between the current and previous's order book quote snapshot.
     const originalOrderBook = orderBookData;
     const currentOrderBook = data;
@@ -153,8 +156,20 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
         }
       }
     }
-    data.sellQuote = newSellArray.reverse();
-    data.buyQuote = newBuyArray;
+    // 4. Calculate the total size bar length.
+    const largestSizePercentRatio =
+      currentOrderBook.sellQuote[0].cumulativeTotal >
+      currentOrderBook.buyQuote[maxQuotes - 1].cumulativeTotal
+        ? 100 / currentOrderBook.sellQuote[0].cumulativeTotal
+        : 100 / currentOrderBook.buyQuote[maxQuotes - 1].cumulativeTotal;
+    for (let i = 0; i < currentOrderBook.sellQuote.length; i++) {
+      currentOrderBook.sellQuote[i].cumulativeTotalInPercent =
+        currentOrderBook.sellQuote[i].cumulativeTotal * largestSizePercentRatio;
+    }
+    for (let i = 0; i < currentOrderBook.buyQuote.length; i++) {
+      currentOrderBook.buyQuote[i].cumulativeTotalInPercent =
+        currentOrderBook.buyQuote[i].cumulativeTotal * largestSizePercentRatio;
+    }
     // console.log(orderBookData);
     // console.log(currentOrderBook.gain);
     setOrderBookData(data);
@@ -204,7 +219,10 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
               renderText={(value) => (
                 <div className="total-size-bar">
                   <span className="size">{value}</span>
-                  <div className="bar" style={{ width: "20%" }}></div>
+                  <div
+                    className="bar"
+                    style={{ width: sellQuote.cumulativeTotalInPercent }}
+                  ></div>
                 </div>
               )}
             />
@@ -281,7 +299,10 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
               renderText={(value) => (
                 <div className="total-size-bar">
                   <span className="size">{value}</span>
-                  <div className="bar" style={{ width: "20%" }}></div>
+                  <div
+                    className="bar"
+                    style={{ width: buyQuote.cumulativeTotalInPercent }}
+                  ></div>
                 </div>
               )}
             />
