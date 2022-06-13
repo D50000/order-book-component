@@ -2,6 +2,7 @@ import { FunctionComponent, useState } from "react";
 import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import Image from "next/image";
+import { Tooltip } from "@nextui-org/react";
 
 import * as CurrencyFormat from "react-currency-format";
 
@@ -199,36 +200,39 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
             }
             key={sellQuote.price}
           >
-            <CurrencyFormat
-              value={sellQuote.price}
-              displayType={"text"}
-              thousandSeparator={true}
-            />
-            <CurrencyFormat
-              className={
-                orderBookData.diffSellQuote[sellQuote.price].sizeChange
-              }
-              value={sellQuote.size}
-              displayType={"text"}
-              thousandSeparator={true}
-            />
-            <CurrencyFormat
-              value={sellQuote.cumulativeTotal}
-              displayType={"text"}
-              thousandSeparator={true}
-              renderText={(value) => (
-                <div className="total-size-bar">
-                  <span className="size">{value}</span>
-                  <div
-                    className="bar"
-                    style={{ width: sellQuote.cumulativeTotalInPercent }}
-                  ></div>
-                </div>
-              )}
-            />
+            <Tooltip content="LLLLLLLLLLL" placement="rightStart" color="primary">
+              <CurrencyFormat
+                value={sellQuote.price}
+                displayType={"text"}
+                thousandSeparator={true}
+              />
+              <CurrencyFormat
+                className={
+                  orderBookData.diffSellQuote[sellQuote.price].sizeChange
+                }
+                value={sellQuote.size}
+                displayType={"text"}
+                thousandSeparator={true}
+              />
+              <CurrencyFormat
+                value={sellQuote.cumulativeTotal}
+                displayType={"text"}
+                thousandSeparator={true}
+                renderText={(value) => (
+                  <div className="total-size-bar">
+                    <span className="size">{value}</span>
+                    <div
+                      className="bar"
+                      style={{ width: sellQuote.cumulativeTotalInPercent }}
+                    ></div>
+                  </div>
+                )}
+              />
+            </Tooltip>
           </div>
         ))}
       </Quote>
+
       {(() => {
         switch (orderBookData?.gain) {
           case 1:
@@ -281,31 +285,35 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
             }
             key={buyQuote.price}
           >
-            <CurrencyFormat
-              value={buyQuote.price}
-              displayType={"text"}
-              thousandSeparator={true}
-            />
-            <CurrencyFormat
-              className={orderBookData.diffBuyQuote[buyQuote.price].sizeChange}
-              value={buyQuote.size}
-              displayType={"text"}
-              thousandSeparator={true}
-            />
-            <CurrencyFormat
-              value={buyQuote.cumulativeTotal}
-              displayType={"text"}
-              thousandSeparator={true}
-              renderText={(value) => (
-                <div className="total-size-bar">
-                  <span className="size">{value}</span>
-                  <div
-                    className="bar"
-                    style={{ width: buyQuote.cumulativeTotalInPercent }}
-                  ></div>
-                </div>
-              )}
-            />
+            <Tooltip content="LLLLLLLLLLL" placement="rightStart" color="primary">
+              <CurrencyFormat
+                value={buyQuote.price}
+                displayType={"text"}
+                thousandSeparator={true}
+              />
+              <CurrencyFormat
+                className={
+                  orderBookData.diffBuyQuote[buyQuote.price].sizeChange
+                }
+                value={buyQuote.size}
+                displayType={"text"}
+                thousandSeparator={true}
+              />
+              <CurrencyFormat
+                value={buyQuote.cumulativeTotal}
+                displayType={"text"}
+                thousandSeparator={true}
+                renderText={(value) => (
+                  <div className="total-size-bar">
+                    <span className="size">{value}</span>
+                    <div
+                      className="bar"
+                      style={{ width: buyQuote.cumulativeTotalInPercent }}
+                    ></div>
+                  </div>
+                )}
+              />
+            </Tooltip>
           </div>
         ))}
       </Quote>

@@ -41,7 +41,6 @@ export const Quote = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   cursor: pointer;
 
   &.sell > div.container {
@@ -49,7 +48,7 @@ export const Quote = styled.div`
       animation: blink-red-animation 0.2s;
     }
 
-    > span:nth-child(1) {
+    > div > span:nth-child(1) {
       color: #ff5b5a;
     }
 
@@ -63,7 +62,7 @@ export const Quote = styled.div`
       animation: blink-green-animation 0.2s;
     }
 
-    > span:nth-child(1) {
+    > div > span:nth-child(1) {
       color: #00b15d;
     }
 
@@ -72,7 +71,7 @@ export const Quote = styled.div`
     }
   }
 
-  > div.container {
+  > div.container > div {
     width: 100%;
     height: 21px;
     padding: 1px 10px 2px;
