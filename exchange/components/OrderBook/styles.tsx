@@ -42,6 +42,7 @@ export const Quote = styled.div`
   flex-direction: column;
   justify-content: center;
   cursor: pointer;
+  position: relative;
 
   &.sell > div.container {
     &.blink-red {
@@ -114,6 +115,24 @@ export const Quote = styled.div`
         left: 5px;
       }
     }
+  }
+
+  div.sell-quote-hover-mask {
+    position: absolute;
+    background: #4665b645;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  div.buy-quote-hover-mask {
+    position: absolute;
+    background: #4665b645;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    right: 0;
   }
 
   @keyframes blink-green-animation {

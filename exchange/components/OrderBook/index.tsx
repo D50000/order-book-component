@@ -45,6 +45,16 @@ enum SizeChange {
   "DECREASE" = "decrease",
 }
 
+enum QuoteType {
+  SELL_QUOTE,
+  BUY_QUOTE,
+}
+
+interface HoverMaskHeight {
+  sellQuoteMaskHeight: number;
+  buyQuoteMaskHeight: number;
+}
+
 const WSS_URL: string = "wss://ws.btse.com/ws/futures";
 const WS_TOPIC = {
   op: "subscribe",
@@ -60,6 +70,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     shouldReconnect: (closeEvent) => true,
     onMessage: (event: WebSocketEventMap["message"]) => getMessages(event.data),
   });
+  const [hoverMaskHeight, setHoverMaskHeight] = useState({} as HoverMaskHeight);
 
   const getMessages = (message: string) => {
     try {
@@ -188,20 +199,17 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     setOrderBookData(data);
   };
 
-  const calculateSellQuoteTooltipData = (index: number) => {
-    // const reversedSellQuote = orderBookData.sellQuote.reverse();
-    // let sumTotalValue = 0;
-    // let sumSize = 0;
-    // for (let i = 0; i < reversedSellQuote.length - index; i++) {
-    //   sumTotalValue += +orderBookData.sellQuote[i].totalValue;
-    //   sumSize += +orderBookData.sellQuote[i].size;
-    // }
-    // const avgPrice = sumTotalValue / sumSize;
-    console.log(
-      orderBookData.sellQuote[index].cumulativeTotalValue /
-        orderBookData.sellQuote[index].cumulativeTotalSize
-    );
-    console.log(orderBookData.sellQuote[index].cumulativeTotalValue);
+  const coverMaskWhenHoverQuote = (index: number, quoteType: QuoteType) => {
+    if (quoteType === QuoteType.SELL_QUOTE) {
+      hoverMaskHeight.sellQuoteMaskHeight = 21 * (8 - index - 1);
+    } else if (quoteType === QuoteType.BUY_QUOTE) {
+      hoverMaskHeight.buyQuoteMaskHeight = 21 * index;
+    }
+    setHoverMaskHeight(hoverMaskHeight);
+  };
+
+  const resetMaskWhenLeaveQuote = () => {
+    setHoverMaskHeight({} as HoverMaskHeight);
   };
 
   // fetch the ws when componentDidMount, componentDidUpdate trigger
@@ -219,6 +227,10 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       <Quote className="sell">
         {orderBookData.sellQuote?.map((sellQuote, index) => (
           <div
+            onMouseEnter={() =>
+              coverMaskWhenHoverQuote(index, QuoteType.SELL_QUOTE)
+            }
+            onMouseLeave={() => resetMaskWhenLeaveQuote()}
             className={
               "container " +
               (orderBookData.diffSellQuote[sellQuote.price].isNewRow
@@ -228,7 +240,6 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
             key={index}
           >
             <Tooltip
-              // onMouseEnter={() => calculateSellQuoteTooltipData(index)}
               placement="rightStart"
               color="invert"
               content={
@@ -265,6 +276,10 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
             </Tooltip>
           </div>
         ))}
+        <div
+          className="sell-quote-hover-mask"
+          style={{ height: hoverMaskHeight.sellQuoteMaskHeight }}
+        ></div>
       </Quote>
 
       {(() => {
@@ -309,8 +324,16 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
         }
       })()}
       <Quote className="buy">
+        <div
+          className="buy-quote-hover-mask"
+          style={{ height: hoverMaskHeight.buyQuoteMaskHeight }}
+        ></div>
         {orderBookData.buyQuote?.map((buyQuote, index) => (
           <div
+            onMouseEnter={() =>
+              coverMaskWhenHoverQuote(index, QuoteType.BUY_QUOTE)
+            }
+            onMouseLeave={() => resetMaskWhenLeaveQuote()}
             className={
               "container " +
               (orderBookData.diffBuyQuote[buyQuote.price].isNewRow
@@ -320,7 +343,6 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
             key={index}
           >
             <Tooltip
-              // onMouseEnter={() => calculateSellQuoteTooltipData(index)}
               placement="rightStart"
               color="invert"
               content={

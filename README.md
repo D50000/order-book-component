@@ -14,13 +14,13 @@ Create a trading order book component in react.js
 - ✅ Framework: React, Vue.js. ⇒ Develop React.js with Next.js
 - ✅ Show max 8 quotes for both buy and sell. Quote row should vertical align center. ⇒ CSS flex
 - ✅ Format number with commas as thousands separators. ⇒ data pipe line
-- Add hover background color on whole row when mouse hover on the quote. ⇒ CSS hover with accumulative rows
+- ✅ Add hover background color on whole row when mouse hover on the quote. ⇒ CSS hover with accumulative rows
 - ✅ Last price is up or down is determine by the data `gain` . ⇒ toggle the up/down icon, **_no 0_**
 - _Price percentage change can be omitted._
 - ✅ Quote total formula ⇒ simple order book logic
   - Sell quotes: sum up quote size from lowest price quote to the highest
   - Buy quotes: sum up quote size from highest price quote to the lowest
-- Add hover calculation tooltip ⇒ Need to get the dynamic data when hovering
+- ✅ Add hover calculation tooltip ⇒ Need to get the dynamic data when hovering
   - AVG Price = [sumproduct](https://support.microsoft.com/en-us/office/sumproduct-function-16753e75-9f68-4874-94ac-4d2145a2fd2e)( price \* size ) / total
   - Total Value = [sumproduct](https://support.microsoft.com/en-us/office/sumproduct-function-16753e75-9f68-4874-94ac-4d2145a2fd2e)( price \* size )
   * [sumproduct reference](https://support.microsoft.com/en-us/office/sumproduct-function-16753e75-9f68-4874-94ac-4d2145a2fd2e) (see Example 1)
@@ -38,7 +38,7 @@ Endpoint: `wss://ws.btse.com/ws/futures`
 
 Topic: `orderBook:BTCPFC_0`
 
-\*\*\* Additional:
+### Additional:
 
 1. ✅ Write Doc.
 2. Add the unit test.
