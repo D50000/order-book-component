@@ -201,6 +201,12 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
               value={sellQuote.cumulativeTotal}
               displayType={"text"}
               thousandSeparator={true}
+              renderText={(value) => (
+                <div className="total-size-bar">
+                  <span className="size">{value}</span>
+                  <div className="bar" style={{ width: "20%" }}></div>
+                </div>
+              )}
             />
           </div>
         ))}
@@ -272,6 +278,12 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
               value={buyQuote.cumulativeTotal}
               displayType={"text"}
               thousandSeparator={true}
+              renderText={(value) => (
+                <div className="total-size-bar">
+                  <span className="size">{value}</span>
+                  <div className="bar" style={{ width: "20%" }}></div>
+                </div>
+              )}
             />
           </div>
         ))}

@@ -52,6 +52,10 @@ export const Quote = styled.div`
     > span:nth-child(1) {
       color: #ff5b5a;
     }
+
+    .total-size-bar .bar {
+      background: rgba(255, 90, 90, 0.12);
+    }
   }
 
   &.buy > div.container {
@@ -61,6 +65,10 @@ export const Quote = styled.div`
 
     > span:nth-child(1) {
       color: #00b15d;
+    }
+
+    .total-size-bar .bar {
+      background: rgba(16, 186, 104, 0.12);
     }
   }
 
@@ -86,6 +94,25 @@ export const Quote = styled.div`
 
       &.decrease {
         animation: blink-red-animation 0.1s;
+      }
+    }
+
+    .total-size-bar {
+      display: flex;
+      width: 33%;
+      position: relative;
+
+      > span.size {
+        width: 100%;
+        text-align: end;
+      }
+
+      > div.bar {
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 5px;
       }
     }
   }
@@ -115,12 +142,12 @@ export const LastPrice = styled.div`
 
   &.increase {
     color: #00b15d;
-    background: rgba(16, 186, 104, 0.12);
+    background: rgba(0, 177, 93, 0.5);
   }
 
   &.decrease {
     color: #ff5b5a;
-    background: rgba(255, 90, 90, 0.12);
+    background: rgba(255, 91, 90, 0.5);
   }
 
   &.fair {
