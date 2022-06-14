@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 import Head from "next/head";
 
 import OrderBook from "../components/OrderBook";
-import { Container } from "./styles/styles";
+import { Container } from "../styles/styles";
 
 const Home: FunctionComponent = (): JSX.Element => {
   return (
