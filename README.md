@@ -48,7 +48,7 @@ Topic: `orderBook:BTCPFC_0`
 
 ### note:
 
-nvm: "v16.14.2"
+node: "v16.14.2"
 react: "17.0.2"
 react-use-websocket: "^3.0.0"
 styled-components: "^5.3.5"

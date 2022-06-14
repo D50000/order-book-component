@@ -95,8 +95,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       totalSellSize += +reversedSellQuote[i].size;
       reversedSellQuote[i].cumulativeTotalSize = totalSellSize;
       reversedSellQuote[i].totalValue =
-        (+reversedSellQuote[i].price * +reversedSellQuote[i].size) /
-        SINGLE_CONTRACT_UNIT;
+        +reversedSellQuote[i].price * +reversedSellQuote[i].size;
       totalSellValue += reversedSellQuote[i].totalValue;
       reversedSellQuote[i].cumulativeTotalValue = totalSellValue;
       newSellArray.push(reversedSellQuote[i]);
@@ -113,8 +112,7 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       totalBuySize += +data.buyQuote[i].size;
       data.buyQuote[i].cumulativeTotalSize = totalBuySize;
       data.buyQuote[i].totalValue =
-        (+data.buyQuote[i].price * +data.buyQuote[i].size) /
-        SINGLE_CONTRACT_UNIT;
+        +data.buyQuote[i].price * +data.buyQuote[i].size;
       totalBuyValue += data.buyQuote[i].totalValue;
       data.buyQuote[i].cumulativeTotalValue = totalBuyValue;
       newBuyArray.push(data.buyQuote[i]);
