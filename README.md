@@ -4,10 +4,9 @@ Create a trading order book component in react.js
 
 ## Instruction
 
-1. Go in side the `exchange` directory.
-2. Clone the source code.
-3. Run `npm install`.
-4. Run `npm run dev`.
+1. Clone the source code.
+2. Run `npm install`.
+3. Run `npm run dev`.
 
 ## Requirements
 
@@ -46,10 +45,10 @@ Topic: `orderBook:BTCPFC_0`
 4. CI/CD
 5. ✅ convert to [txs](https://nextjs.org/docs/basic-features/typescript) file
 
-### note:
+### Library:
 
-node: "v16.14.2"
-react: "17.0.2"
-react-use-websocket: "^3.0.0"
-styled-components: "^5.3.5"
+node: "v16.14.2"  
+react: "17.0.2"  
+react-use-websocket: "^3.0.0"  
+styled-components: "^5.3.5"  
 react-currency-format: "^1.1.0"
