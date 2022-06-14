@@ -42,9 +42,18 @@ export const Quote = styled.div`
   flex-direction: column;
   justify-content: center;
   cursor: pointer;
-  position: relative;
 
   &.sell > div.container {
+    // For cumulate hover
+    &:hover {
+      background: #334573;
+      cursor: pointer;
+    }
+    &:hover ~ div {
+      background: #4665b645;
+    }
+
+    // For size bar
     &.blink-red {
       animation: blink-red-animation 0.2s;
     }
@@ -58,7 +67,23 @@ export const Quote = styled.div`
     }
   }
 
+  // For BuyQuote cumulate hover
+  &.buy:hover {
+    background: #4665b645;
+  }
+
   &.buy > div.container {
+    // For cumulate hover
+    &:hover {
+      background: #334573;
+      cursor: pointer;
+    }
+
+    &:hover ~ div.container {
+      background: #1e2c4c;
+    }
+
+    // For size bar
     &.blink-green {
       animation: blink-green-animation 0.2s;
     }
@@ -78,11 +103,6 @@ export const Quote = styled.div`
     padding: 1px 10px 2px;
     display: flex;
     justify-content: space-between;
-
-    &:hover {
-      background: #334573;
-      cursor: pointer;
-    }
 
     > span {
       width: 33%;
@@ -115,24 +135,6 @@ export const Quote = styled.div`
         left: 5px;
       }
     }
-  }
-
-  div.sell-quote-hover-mask {
-    position: absolute;
-    background: #4665b645;
-    z-index: 2;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-
-  div.buy-quote-hover-mask {
-    position: absolute;
-    background: #4665b645;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    right: 0;
   }
 
   @keyframes blink-green-animation {

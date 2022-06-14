@@ -50,11 +50,6 @@ enum QuoteType {
   BUY_QUOTE,
 }
 
-interface HoverMaskHeight {
-  sellQuoteMaskHeight: number;
-  buyQuoteMaskHeight: number;
-}
-
 const WSS_URL: string = "wss://ws.btse.com/ws/futures";
 const WS_TOPIC = {
   op: "subscribe",
@@ -70,7 +65,6 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     shouldReconnect: (closeEvent) => true,
     onMessage: (event: WebSocketEventMap["message"]) => getMessages(event.data),
   });
-  const [hoverMaskHeight, setHoverMaskHeight] = useState({} as HoverMaskHeight);
 
   const getMessages = (message: string) => {
     try {
@@ -101,7 +95,8 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       totalSellSize += +reversedSellQuote[i].size;
       reversedSellQuote[i].cumulativeTotalSize = totalSellSize;
       reversedSellQuote[i].totalValue =
-        +reversedSellQuote[i].price * +reversedSellQuote[i].size;
+        (+reversedSellQuote[i].price * +reversedSellQuote[i].size) /
+        SINGLE_CONTRACT_UNIT;
       totalSellValue += reversedSellQuote[i].totalValue;
       reversedSellQuote[i].cumulativeTotalValue = totalSellValue;
       newSellArray.push(reversedSellQuote[i]);
@@ -118,7 +113,8 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       totalBuySize += +data.buyQuote[i].size;
       data.buyQuote[i].cumulativeTotalSize = totalBuySize;
       data.buyQuote[i].totalValue =
-        +data.buyQuote[i].price * +data.buyQuote[i].size;
+        (+data.buyQuote[i].price * +data.buyQuote[i].size) /
+        SINGLE_CONTRACT_UNIT;
       totalBuyValue += data.buyQuote[i].totalValue;
       data.buyQuote[i].cumulativeTotalValue = totalBuyValue;
       newBuyArray.push(data.buyQuote[i]);
@@ -199,19 +195,6 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
     setOrderBookData(data);
   };
 
-  const coverMaskWhenHoverQuote = (index: number, quoteType: QuoteType) => {
-    if (quoteType === QuoteType.SELL_QUOTE) {
-      hoverMaskHeight.sellQuoteMaskHeight = 21 * (8 - index - 1);
-    } else if (quoteType === QuoteType.BUY_QUOTE) {
-      hoverMaskHeight.buyQuoteMaskHeight = 21 * index;
-    }
-    setHoverMaskHeight(hoverMaskHeight);
-  };
-
-  const resetMaskWhenLeaveQuote = () => {
-    setHoverMaskHeight({} as HoverMaskHeight);
-  };
-
   // fetch the ws when componentDidMount, componentDidUpdate trigger
   useEffect(() => {
     sendJsonMessage(WS_TOPIC);
@@ -227,10 +210,6 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
       <Quote className="sell">
         {orderBookData.sellQuote?.map((sellQuote, index) => (
           <div
-            onMouseEnter={() =>
-              coverMaskWhenHoverQuote(index, QuoteType.SELL_QUOTE)
-            }
-            onMouseLeave={() => resetMaskWhenLeaveQuote()}
             className={
               "container " +
               (orderBookData.diffSellQuote[sellQuote.price].isNewRow
@@ -276,10 +255,6 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
             </Tooltip>
           </div>
         ))}
-        <div
-          className="sell-quote-hover-mask"
-          style={{ height: hoverMaskHeight.sellQuoteMaskHeight }}
-        ></div>
       </Quote>
 
       {(() => {
@@ -324,16 +299,8 @@ const OrderBook: FunctionComponent = (): JSX.Element => {
         }
       })()}
       <Quote className="buy">
-        <div
-          className="buy-quote-hover-mask"
-          style={{ height: hoverMaskHeight.buyQuoteMaskHeight }}
-        ></div>
         {orderBookData.buyQuote?.map((buyQuote, index) => (
           <div
-            onMouseEnter={() =>
-              coverMaskWhenHoverQuote(index, QuoteType.BUY_QUOTE)
-            }
-            onMouseLeave={() => resetMaskWhenLeaveQuote()}
             className={
               "container " +
               (orderBookData.diffBuyQuote[buyQuote.price].isNewRow
