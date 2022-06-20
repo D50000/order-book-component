@@ -42,7 +42,7 @@ Topic: `orderBook:BTCPFC_0`
 
 1. ✅ Write Doc.
 2. Add the unit test.
-3. Host a server for demo.
+3. ✅ Host a server for demo.
 4. CI/CD
 5. ✅ convert to [txs](https://nextjs.org/docs/basic-features/typescript) file
 
