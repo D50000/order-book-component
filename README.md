@@ -3,7 +3,7 @@
 Create a trading order book component in react.js
 
 ## Instruction & Demo
-[Demo Website](https://d50000.github.io/order-book-component/)
+🖥 *[Demo Website](https://d50000.github.io/order-book-component/)*  
 ![](https://github.com/D50000/order-book-component/blob/main/assets/demo.jpg)  
 
 1. Clone the source code.
